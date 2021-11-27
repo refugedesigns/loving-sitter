@@ -9,37 +9,25 @@ import {
 import { CssBaseline } from "@mui/material";
 import { MenuTwoTone } from "@mui/icons-material";
 import SearchForm from "../SearchForm/SearchForm";
-import {
-  logo,
-  mainText,
-  root,
-  bgImage,
-  wrapper,
-  logoMenuWrapper,
-  menuIcon,
-  buttonsWrapper,
-  loginButton,
-  signUpButton,
-  sitterLink,
-} from "./useStyles";
+import * as classes from "./useStyles";
 import logoImage from "../../../images/logo.png";
 
 const Search: React.FC = () => {
   return (
-    <Grid sx={root} component="main" container>
+    <Grid sx={classes.root} component="main" container>
       <CssBaseline />
       <Grid item xs={12} md={6} component={Paper} square>
-        <Box sx={wrapper}>
-          <Box sx={logoMenuWrapper}>
-            <Box sx={logo} component={IconButton}>
+        <Box sx={classes.wrapper}>
+          <Box sx={classes.logoMenuWrapper}>
+            <Box sx={classes.logo} component={IconButton}>
               <Box component="img" src={logoImage} alt="logo" />
             </Box>
-            <Box sx={menuIcon} component={IconButton}>
+            <Box sx={classes.menuIcon} component={IconButton}>
               <MenuTwoTone fontSize="large" color="primary" />
             </Box>
           </Box>
           <Box width="100%" maxWidth={450} p={3} alignSelf="center">
-            <Box sx={mainText} component={Typography} variant="h4">
+            <Box sx={classes.mainText} component={Typography} variant="h4">
               Find the care your dog deserve
             </Box>
             <SearchForm />
@@ -47,15 +35,15 @@ const Search: React.FC = () => {
         </Box>
       </Grid>
       <Grid xs={0} md={6} component={Paper} square>
-        <Box sx={bgImage} component={Paper} square>
-          <Box sx={buttonsWrapper}>
-            <Box sx={sitterLink} variant="text" component={Button}>
+        <Box sx={classes.bgImage} component={Paper} square>
+          <Box sx={classes.buttonsWrapper}>
+            <Box sx={classes.sitterLink} variant="text" component={Button}>
               Become a sitter
             </Box>
-            <Box sx={loginButton} variant="outlined" component={Button}>
+            <Box sx={classes.loginButton} variant="outlined" component={Button}>
               Login
             </Box>
-            <Box sx={signUpButton} variant="contained" component={Button}>
+            <Box sx={classes.signUpButton} variant="contained" component={Button}>
               Sign Up
             </Box>
           </Box>

@@ -10,14 +10,7 @@ import {
 import { DatePicker } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import {
-  dateText,
-  searchInputLabel,
-  dropIn,
-  dropOff,
-  searchBox,
-  submit,
-} from "./useStyles";
+import * as classes from "./useStyles";
 
 const SearchForm: React.FC = () => {
   const [value, setValue] = useState<Date | null>(null);
@@ -25,8 +18,8 @@ const SearchForm: React.FC = () => {
   return (
     <form>
       <Grid container>
-        <Box sx={searchBox} item xs={12} component={Grid}>
-          <Box sx={searchInputLabel} component={InputLabel} htmlFor="location">
+        <Box sx={classes.searchBox} item xs={12} component={Grid}>
+          <Box sx={classes.searchInputLabel} component={InputLabel} htmlFor="location">
             Where
           </Box>
           <Box
@@ -38,7 +31,7 @@ const SearchForm: React.FC = () => {
           />
         </Box>
         <Grid item xs={12} container>
-          <Box sx={dateText} component={Typography}>
+          <Box sx={classes.dateText} component={Typography}>
             Drop in / Drop Off
           </Box>
           <Grid item xs={12} component={Box}>
@@ -47,7 +40,7 @@ const SearchForm: React.FC = () => {
                 value={value}
                 onChange={(newValue: any) => setValue(newValue)}
                 renderInput={(params: any) => (
-                  <Box sx={dropIn} {...params} component={TextField} />
+                  <Box sx={classes.dropIn} {...params} component={TextField} />
                 )}
                 component={DatePicker}
               />
@@ -55,7 +48,7 @@ const SearchForm: React.FC = () => {
                 value={value}
                 onChange={(newValue: any) => setValue(newValue)}
                 renderInput={(params: any) => (
-                  <Box sx={dropOff} {...params} component={TextField} />
+                  <Box sx={classes.dropOff} {...params} component={TextField} />
                 )}
                 component={DatePicker}
               />
@@ -63,7 +56,7 @@ const SearchForm: React.FC = () => {
           </Grid>
         </Grid>
         <Box
-          sx={submit}
+          sx={classes.submit}
           type="submit"
           variant="contained"
           disableElevation
