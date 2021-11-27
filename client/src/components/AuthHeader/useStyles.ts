@@ -25,7 +25,13 @@ export const logoImage = {
 
 export const sitterText = {
   color: "black",
-  textDecoration: "underline",
+  textTransform: "capitalize",
+  fontWeight: "bold",
+  mx: 1,
+  letterSpacing: "1px",
+  [`:hover`]: {
+    textDecoration: "underline",
+  },
 } as const;
 
 export const loginButton = {
@@ -41,4 +47,9 @@ export const signUpButton = {
   width: 120,
   whiteSpace: "nowrap",
   letterSpacing: "1px",
+} as const;
+
+export const avatar = {
+  mx: 1,
+  cursor: "pointer",
 } as const;
