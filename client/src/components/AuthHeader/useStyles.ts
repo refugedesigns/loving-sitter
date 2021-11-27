@@ -1,4 +1,7 @@
-export const authWrapper = {
+import { SxProps } from "@mui/system";
+import { Theme } from "@mui/material/styles";
+
+export const authWrapper: SxProps<Theme> = {
   boxShadow: { xs: 0, md: 5 },
   display: "flex",
   justifyContent: "space-between",
@@ -7,23 +10,23 @@ export const authWrapper = {
   px: { xs: 2, md: 5, lg: 10 },
 } as const;
 
-export const mobileToggle = {
+export const mobileToggle: SxProps<Theme> = {
   display: {
     xs: "inline-flex",
     md: "none",
   },
 } as const;
 
-export const desktopButtons = {
+export const desktopButtons: SxProps<Theme> = {
   display: { xs: "none", md: "inline-flex" },
 } as const;
 
-export const logoImage = {
+export const logoImage: SxProps<Theme> = {
   cursor: "pointer",
   borderRadius: 0,
 } as const;
 
-export const sitterText = {
+export const sitterText: SxProps<Theme> = {
   color: "black",
   textTransform: "capitalize",
   fontWeight: "bold",
@@ -34,7 +37,7 @@ export const sitterText = {
   },
 } as const;
 
-export const loginButton = {
+export const loginButton: SxProps<Theme> = {
   height: 50,
   width: 120,
   whiteSpace: "nowrap",
@@ -42,14 +45,14 @@ export const loginButton = {
   mx: 3,
 } as const;
 
-export const signUpButton = {
+export const signUpButton: SxProps<Theme> = {
   height: 50,
   width: 120,
   whiteSpace: "nowrap",
   letterSpacing: "1px",
 } as const;
 
-export const avatar = {
+export const avatar: SxProps<Theme> = {
   mx: 1,
   cursor: "pointer",
 } as const;
