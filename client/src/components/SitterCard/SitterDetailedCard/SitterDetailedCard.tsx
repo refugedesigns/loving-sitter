@@ -128,7 +128,7 @@ const SitterDetailedCard = () => {
           )}
         </Box>
       </Card>
-      <Box>
+      <Box sx={classes.sideCardWrapper}>
         <SideCard />
       </Box>
     </Box>

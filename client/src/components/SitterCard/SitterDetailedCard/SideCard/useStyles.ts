@@ -3,12 +3,13 @@ import { SxProps } from "@mui/system";
 
 export const cardWrapper: SxProps<Theme> = {
   p: 4,
-  my: 5,
+  my: {xs: 5, lg: 0},
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
-  maxWidth: { sm: 500}
+  ml: {md: 5},
+  maxWidth: { sm: 400}
 } as const;
 
 export const price: SxProps<Theme> = {

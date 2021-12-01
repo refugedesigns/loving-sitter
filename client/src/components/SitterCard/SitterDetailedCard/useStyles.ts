@@ -1,14 +1,28 @@
 import { Theme } from "@mui/material/styles";
 import { SxProps } from "@mui/system";
 
-export const mainCardWrapper: SxProps<Theme> = {} as const;
+export const mainCardWrapper: SxProps<Theme> = {
+  py: 5,
+  display: "flex",
+  flexDirection: { xs: "column", lg: "row" },
+  justifyContent: { md: "center" },
+  alignItems: {sm: "center", lg: "start"},
+} as const;
 
 export const subCardWrapper: SxProps<Theme> = {
   position: "relative",
   display: "flex",
+  flexGrow: { lg: 1 },
   flexDirection: "column",
-  maxWidth: { sm: 500, lg: 900 },
+  width: { xs: "100%", sm: "80%", md: "70%", lg: "50%" },
+  maxWidth: { lg: 900 },
 } as const;
+
+export const sideCardWrapper: SxProps<Theme> = {
+  display: "flex",
+  justifyContent: "center",
+  height: { md: 550 },
+};
 
 export const imageWrapper: SxProps<Theme> = {
   height: 240,

@@ -21,8 +21,6 @@ const Listings = () => {
       <Box>
         <SitterCard />
       </Box>
-      <SitterDetailedCard />
-      <BookingsCard />
     </Box>
   );
 };
