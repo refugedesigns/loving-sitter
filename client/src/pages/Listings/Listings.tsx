@@ -4,6 +4,7 @@ import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import SearchForm from "./SearchForm/SearchForm";
 import SitterCard from "../../components/SitterCard/SitterCard";
 import * as classes from "./useStyles";
+import SitterDetailedCard from "../../components/SitterCard/SitterDetailedCard/SitterDetailedCard";
 
 const Listings = () => {
   return (
@@ -19,6 +20,7 @@ const Listings = () => {
       <Box>
         <SitterCard />
       </Box>
+      <SitterDetailedCard />
     </Box>
   );
 };
