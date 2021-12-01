@@ -16,13 +16,13 @@ export const imageWrapper: SxProps<Theme> = {
 } as const;
 
 export const avatarWrapper: SxProps<Theme> = {
-  position: "absolute",
   border: "5px solid white",
   height: 120,
   width: 120,
-  top: 240,
+  position: "absolute",
+  top: 180,
   left: "50%",
-  transform: "translate(-50%, -50%)"
+  transform: "translate(-50% )",
 } as const;
 
 export const userInfoWrapper: SxProps<Theme> = {
