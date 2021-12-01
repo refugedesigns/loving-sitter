@@ -4,6 +4,8 @@ import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import SearchForm from "./SearchForm/SearchForm";
 import SitterCard from "../../components/SitterCard/SitterCard";
 import * as classes from "./useStyles";
+import SitterDetailedCard from "../../components/SitterCard/SitterDetailedCard/SitterDetailedCard";
+import BookingsCard from "../../components/BookingsCard/BookingsCard";
 
 const Listings = () => {
   return (

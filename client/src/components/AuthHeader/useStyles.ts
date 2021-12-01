@@ -4,10 +4,12 @@ import { Theme } from "@mui/material/styles";
 export const authWrapper: SxProps<Theme> = {
   boxShadow: { xs: 0, md: 5 },
   display: "flex",
+  flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
   height: 90,
   px: { xs: 2, md: 5, lg: 10 },
+  bgcolor: "#fff"
 } as const;
 
 export const mobileToggle: SxProps<Theme> = {

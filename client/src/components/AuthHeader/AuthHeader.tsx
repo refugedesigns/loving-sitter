@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, IconButton, Button, Paper, Avatar } from "@mui/material";
+import { Box, IconButton, Button, Paper, Avatar, AppBar } from "@mui/material";
 import { MenuTwoTone } from "@mui/icons-material";
 import * as classes from "./useStyles";
 import logo from "../../images/logo.png";
@@ -7,7 +7,7 @@ import logo from "../../images/logo.png";
 const AuthHeader: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
   return (
-    <Box sx={classes.authWrapper} component={Paper} square>
+    <Box sx={classes.authWrapper} component={AppBar} position="sticky">
       <Box sx={classes.logoImage} component={IconButton}>
         <Box src={logo} component="img" alt="loving sitter logo" />
       </Box>
@@ -20,7 +20,11 @@ const AuthHeader: React.FC = () => {
             <Button variant="outlined" sx={classes.loginButton}>
               Login
             </Button>
-            <Button variant="contained" sx={classes.signUpButton} disableElevation>
+            <Button
+              variant="contained"
+              sx={classes.signUpButton}
+              disableElevation
+            >
               Sign up
             </Button>
           </Box>

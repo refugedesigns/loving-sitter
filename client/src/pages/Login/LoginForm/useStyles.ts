@@ -1,3 +1,6 @@
+import { Theme } from "@mui/material/styles";
+import { SxProps } from "@mui/system";
+
 export const button = {
   height: 50,
   width: 180,
@@ -44,17 +47,17 @@ export const signUpButton = {
   textDecoration: "underline",
   [`:hover`]: {
     cursor: "pointer",
-    textDecoration: "none"
+    textDecoration: "none",
   },
 } as const;
 
 export const forgot = {
- mt: 1,
- color: "primary.main",
- textDecoration: "underline",
- fontWeight: "bold",
- [`:hover`]: {
-   cursor: "pointer",
-   textDecoration: "none"
- }
-}as const
+  mt: 1,
+  color: "primary.main",
+  textDecoration: "underline",
+  fontWeight: "bold",
+  [`:hover`]: {
+    cursor: "pointer",
+    textDecoration: "none",
+  },
+} as const;

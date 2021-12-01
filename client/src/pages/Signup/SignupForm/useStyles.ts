@@ -1,3 +1,6 @@
+import { Theme } from "@mui/material/styles";
+import { SxProps } from "@mui/system";
+
 export const button = {
   height: 50,
   width: 180,
@@ -17,7 +20,6 @@ export const buttonWrapper = {
 export const emailWrapper = {
   my: 3,
 } as const;
-
 
 export const emailText = {
   textTransform: "uppercase",
