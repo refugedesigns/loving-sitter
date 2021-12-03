@@ -10,7 +10,7 @@ const theme = {
     fontFamily: '"Roboto", "Arial"'
   },
   shape: {
-    borderRadius: 2
+    borderRadius: 4
   },
 } as const;
 
