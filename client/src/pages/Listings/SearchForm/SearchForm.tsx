@@ -20,7 +20,6 @@ const SearchForm: React.FC = () => {
               component={TextField}
               {...params}
               label="Drop in"
-              defaultValue="mm/dd"
               InputProps={{
                 endAdornment: null,
               }}

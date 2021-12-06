@@ -1,4 +1,4 @@
-import { Card, Box, Typography, Avatar, IconButton } from "@mui/material";
+import { Card, Box, Typography, Avatar, } from "@mui/material";
 import { AddAPhoto } from "@mui/icons-material";
 import * as classes from "./useStyles";
 

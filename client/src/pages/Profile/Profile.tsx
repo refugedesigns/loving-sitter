@@ -4,6 +4,7 @@ import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import * as classes from "./useStyles";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
 import ProfilePhoto from "../../components/ProfilePhoto/ProfilePhoto";
+import AvailabilityCard from "../../components/AvailabilityCard/AvailabilityCard"
 
 const Profile = () => {
   return (
@@ -36,7 +37,7 @@ const Profile = () => {
           </Box>
         </Box>
         <Box sx={classes.componentWrapper}>
-          <ProfilePhoto />
+          <AvailabilityCard />
         </Box>
       </Container>
     </Box>
