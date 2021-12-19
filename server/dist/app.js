@@ -23,7 +23,7 @@ const io = new socket_io_1.default.Server(server, {
     },
 });
 io.on("connection", (socket) => {
-    console.log("connected");
+    console.log("client connected");
 });
 const port = parseInt(process.env.PORT, 10) || 8080;
 app.set("port", port);
@@ -40,7 +40,7 @@ app.use((req, res, next) => {
     req.io = io;
     next();
 });
-app.use("/auth", auth_1.default);
+app.use("/api/auth", auth_1.default);
 if (process.env.NODE_ENV === "production") {
     app.use(express_1.default.static(path_1.default.join(__dirname, "/client/build")));
     app.get("*", (_, res) => res.sendFile(path_1.default.resolve(__dirname), "client/build/index.html"));

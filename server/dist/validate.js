@@ -3,8 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateLogin = exports.validateRegister = void 0;
 const express_validator_1 = require("express-validator");
 exports.validateRegister = [
-    (0, express_validator_1.check)("firstName", "Please enter your first name").not().isEmpty(),
-    (0, express_validator_1.check)("lastName", "Please enter your last name").not().isEmpty(),
+    (0, express_validator_1.check)("name", "Please enter your name").not().isEmpty(),
     (0, express_validator_1.check)("email", "Please enter a valid email address").isEmail(),
     (0, express_validator_1.check)("password", "Please enter a password with 6 or more characters").isLength({ min: 6 }),
     (req, res, next) => {

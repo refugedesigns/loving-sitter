@@ -11,6 +11,7 @@ import { MenuTwoTone } from "@mui/icons-material";
 import SearchForm from "../SearchForm/SearchForm";
 import * as classes from "./useStyles";
 import logoImage from "../../../images/logo.png";
+import { Link } from "react-router-dom";
 
 const Search: React.FC = () => {
   return (
@@ -41,10 +42,18 @@ const Search: React.FC = () => {
               Become a sitter
             </Box>
             <Box sx={classes.loginButton} variant="outlined" component={Button}>
-              Login
+              <Box sx={classes.link} component={Link} to="/login">
+                Login
+              </Box>
             </Box>
-            <Box sx={classes.signUpButton} variant="contained" component={Button}>
-              Sign Up
+            <Box
+              sx={classes.signUpButton}
+              variant="contained"
+              component={Button}
+            >
+              <Box sx={classes.link} component={Link} to="/signup">
+                Signup
+              </Box>
             </Box>
           </Box>
         </Box>

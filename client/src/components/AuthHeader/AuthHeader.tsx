@@ -1,15 +1,18 @@
 import { useState } from "react";
-import { Box, IconButton, Button, Paper, Avatar, AppBar } from "@mui/material";
+import { Box, IconButton, Button, Avatar, AppBar } from "@mui/material";
 import { MenuTwoTone } from "@mui/icons-material";
 import * as classes from "./useStyles";
 import logo from "../../images/logo.png";
+import { Link } from "react-router-dom";
 
 const AuthHeader: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(true);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   return (
     <Box sx={classes.authWrapper} component={AppBar} position="sticky">
       <Box sx={classes.logoImage} component={IconButton}>
-        <Box src={logo} component="img" alt="loving sitter logo" />
+        <Box component={Link} to="/">
+          <Box src={logo} component="img" alt="loving sitter logo" />
+        </Box>
       </Box>
       <Box>
         <Box sx={classes.mobileToggle} component={IconButton}>
@@ -18,14 +21,18 @@ const AuthHeader: React.FC = () => {
         {!isLoggedIn ? (
           <Box sx={classes.desktopButtons}>
             <Button variant="outlined" sx={classes.loginButton}>
-              Login
+              <Box sx={classes.login} component={Link} to="/login">
+                Login
+              </Box>
             </Button>
             <Button
               variant="contained"
               sx={classes.signUpButton}
               disableElevation
             >
-              Sign up
+              <Box sx={classes.link} component={Link} to="/signup">
+                Signup
+              </Box>
             </Button>
           </Box>
         ) : (
@@ -39,10 +46,12 @@ const AuthHeader: React.FC = () => {
             <Button variant="text" sx={classes.sitterText}>
               My Bookings
             </Button>
-            <Button variant="text" sx={classes.sitterText}>
-              Messages
+            <Button variant="text">
+              <Box sx={classes.sitterText} component={Link} to="/messages">
+                Messages
+              </Box>
             </Button>
-            <Box sx={classes.avatar}>
+            <Box component={Link} to="/profile" sx={classes.avatar}>
               <Box component={Avatar} />
             </Box>
           </Box>

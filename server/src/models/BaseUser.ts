@@ -1,23 +1,27 @@
 import { Schema, model } from "mongoose";
-import bcrypt from "bcrypt"
-import { User } from "src/interface";
+import bcrypt from "bcrypt";
+import { UserModel, UserDocument } from "../interface";
 
-const BaseUserSchema = new Schema<User>({
-  firstName: {
+const baseOptions = {
+  discriminator: "_key",
+  collections: "users",
+  timestamps: true,
+};
+
+export const BaseModel = model<UserModel>("BaseModel", new Schema({}, baseOptions));
+
+const BaseUserSchema: Schema = new Schema({
+  name: {
     type: String,
-    required: true
-  },
-  lastName: {
-    type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   city: String,
   address: String,
@@ -25,13 +29,15 @@ const BaseUserSchema = new Schema<User>({
   profilePhoto: String,
   about: String,
   payments: [],
-  imageGallery: [{
-    type: Schema.Types.ObjectId,
-    ref: "Image"
-  }]
-}, {timestamps: true, collection: "users", discriminatorKey: "type"})
+  imageGallery: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Image",
+    },
+  ],
+});
 
-BaseUserSchema.methods.matchPassword = async function (enteredPassword) {
+BaseUserSchema.methods.matchPassword = async function (this: UserDocument, enteredPassword: string): Promise<boolean> {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
@@ -44,6 +50,9 @@ BaseUserSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-const BaseUser = model("BaseUser", BaseUserSchema)
+const BaseUser = BaseModel.discriminator<UserDocument, UserModel>(
+  "BaseUser",
+  BaseUserSchema
+);
 
 export default BaseUser

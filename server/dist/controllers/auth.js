@@ -12,23 +12,68 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerUser = void 0;
+exports.loadUser = exports.loginUser = exports.registerUser = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
 const BaseUser_1 = __importDefault(require("../models/BaseUser"));
 const customError_1 = require("../customError");
+const generateToken_1 = __importDefault(require("../utils/generateToken"));
 exports.registerUser = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { firstName, lastName, email, password } = req.body;
+    const { name, email, password } = req.body;
     const emailExists = yield BaseUser_1.default.findOne({ email: email });
     if (emailExists) {
-        const error = new customError_1.StatusError("A user with this email already exists");
-        error.statusCode = 400;
-        throw error;
+        throw new customError_1.StatusError("A user with this email already exists", 422);
     }
     const user = yield BaseUser_1.default.create({
-        firstName,
-        lastName,
+        name,
         email,
         password,
     });
-    res.status(201).json(user);
+    // if (user) {
+    //   const token = generateToken(user._id);
+    //   res.cookie("token", token, {
+    //     httpOnly: true,
+    //     maxAge: 3600 * 1000,
+    //   });
+    // }
+    res.status(201).json({
+        success: {
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+            },
+        },
+    });
+}));
+exports.loginUser = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, password } = req.body;
+    const user = yield BaseUser_1.default.findOne({ email });
+    if (!user) {
+        throw new customError_1.StatusError("A user with this email was not found.", 422);
+    }
+    const isEqual = yield user.matchPassword(password);
+    if (!isEqual) {
+        throw new customError_1.StatusError("Invalid email or password.", 422);
+    }
+    const token = (0, generateToken_1.default)(user._id);
+    res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 3600 * 1000,
+    });
+    res.status(200).json({
+        success: {
+            user: {
+                id: user._id,
+                email: user.email,
+                name: user.name,
+                imageGallery: user.imageGallery,
+                payments: user.payments
+            },
+        },
+    });
+}));
+exports.loadUser = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.params.id;
+    const user = yield BaseUser_1.default.findById(id);
+    res.status(200).json(user);
 }));

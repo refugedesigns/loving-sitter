@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import socket, { Server } from "socket.io";
+import { JwtPayload } from "jsonwebtoken";
 import http from "http";
 import path from "path";
 import { notFound, errorHandler } from "./middleware/error";
@@ -12,9 +13,11 @@ import authRoutes from "./routes/auth"
 declare module "express-serve-static-core" {
   interface Request {
     io?: Server;
+    userId?: string | JwtPayload;
   }
   interface Response {
     io?: Server;
+    userId?: string | JwtPayload;
   }
 }
 
@@ -33,7 +36,7 @@ const io = new socket.Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log("connected");
+  console.log("client connected");
 });
 
 const port: Number = parseInt(<string>process.env.PORT, 10) || 8080;
@@ -57,7 +60,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-app.use("/auth", authRoutes)
+app.use("/api/auth", authRoutes)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));

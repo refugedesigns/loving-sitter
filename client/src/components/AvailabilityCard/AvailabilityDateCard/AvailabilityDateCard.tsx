@@ -11,23 +11,38 @@ import DateAdapter from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Circle } from "@mui/icons-material";
 import * as classes from "./useStyles";
+import { Moment } from "moment";
+import { FormEventHandler } from "react"
 
-const AvailabilityDateCard: React.FC = () => {
+interface Props {
+  date: string;
+  weekDay: string;
+}
+
+const AvailabilityDateCard: React.FC<Props> = ({ date, weekDay }) => {
   const [value, setValue] = useState<boolean>();
+
+  const handleFromChange = (newValue: unknown) => {
+    console.log(newValue);
+  };
+
+  const handleToChange = (newValue: unknown) => {
+    console.log(newValue);
+  };
   return (
     <Box sx={classes.cardWrapper}>
       <CssBaseline />
       <Box sx={classes.dateWrapper}>
         <Box component={Circle} fontSize="small" />
         <Box sx={classes.date} component={Typography}>
-          17 June,{" "}
+          {`${date?.split(" ")[0]} ${date?.split(" ")[1]}`},{" "}
           <Box
             sx={{
               color: "#c0c0c0",
             }}
             component="span"
           >
-            Monday
+           {weekDay?.split(" ")[2]}
           </Box>
         </Box>
       </Box>
@@ -40,7 +55,7 @@ const AvailabilityDateCard: React.FC = () => {
             <Box
               component={TimePicker}
               value={value}
-              onChange={(newValue: any) => setValue(newValue)}
+              onChange={handleFromChange}
               renderInput={(params: any) => (
                 <Box sx={classes.timeBox} component={TextField} {...params} />
               )}
@@ -55,7 +70,7 @@ const AvailabilityDateCard: React.FC = () => {
             <Box
               component={TimePicker}
               value={value}
-              onChange={(newValue: any) => setValue(newValue)}
+              onChange={handleToChange}
               renderInput={(params: any) => (
                 <Box sx={classes.timeBox} component={TextField} {...params} />
               )}

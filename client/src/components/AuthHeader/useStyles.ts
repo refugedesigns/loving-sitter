@@ -9,7 +9,7 @@ export const authWrapper: SxProps<Theme> = {
   alignItems: "center",
   height: 90,
   px: { xs: 2, md: 5, lg: 10 },
-  bgcolor: "#fff"
+  bgcolor: "#fff",
 } as const;
 
 export const mobileToggle: SxProps<Theme> = {
@@ -32,6 +32,7 @@ export const sitterText: SxProps<Theme> = {
   color: "black",
   textTransform: "capitalize",
   fontWeight: "bold",
+  textDecoration: "none",
   mx: 1,
   letterSpacing: "1px",
   [`:hover`]: {
@@ -58,3 +59,13 @@ export const avatar: SxProps<Theme> = {
   mx: 1,
   cursor: "pointer",
 } as const;
+
+export const link: SxProps<Theme> = {
+  color: "#fff",
+  textDecoration: "none",
+};
+
+export const login: SxProps<Theme> = {
+  color: "primary.main",
+  textDecoration: "none",
+};
