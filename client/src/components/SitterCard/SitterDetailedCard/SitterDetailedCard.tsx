@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LocationOn, Star, Edit, Close } from "@mui/icons-material";
 import {
   Box,
@@ -12,18 +12,33 @@ import SideCard from "./SideCard/SideCard";
 import Image from "../../../images/cover.jpg";
 import * as classes from "./useStyles";
 
-const SitterDetailedCard = () => {
+interface Props {
+  name: string;
+  location: string;
+  availability: string[];
+  price: number;
+  profilePhoto: string;
+}
+
+const SitterDetailedCard: React.FC<Props> = ({
+  name,
+  location,
+  availability,
+  price,
+  profilePhoto,
+}) => {
   const [writeReview, setWriteReview] = useState<boolean>(false);
+
   return (
     <Box sx={classes.mainCardWrapper}>
       <Card sx={classes.subCardWrapper} raised>
         <Box>
           <Box sx={classes.imageWrapper} component="img" src={Image} />
         </Box>
-        <Box sx={classes.avatarWrapper} component={Avatar} />
+        <Box sx={classes.avatarWrapper} component={Avatar} src={profilePhoto} />
         <Box sx={classes.userInfoWrapper}>
           <Box variant="h5" component={Typography}>
-            Hatchy Hactways
+            {name}
           </Box>
           <Box sx={classes.textStyles} component={Typography}>
             Loving Pet Sitter
@@ -31,26 +46,16 @@ const SitterDetailedCard = () => {
           <Box sx={classes.locationWrapper}>
             <Box sx={classes.locationIcon} component={LocationOn} />
             <Box sx={classes.textStyles} component={Typography}>
-              Kamloops
+              {location}
             </Box>
           </Box>
           <Box sx={classes.availability}>
             <Box component={Typography}>Availability:</Box>
-            <Box sx={classes.days} component={Typography}>
-              Mon
-            </Box>
-            <Box sx={classes.days} component={Typography}>
-              Tues
-            </Box>
-            <Box sx={classes.days} component={Typography}>
-              Wed
-            </Box>
-            <Box sx={classes.days} component={Typography}>
-              Fri
-            </Box>
-            <Box sx={classes.days} component={Typography}>
-              Thurs
-            </Box>
+            {availability.map((day, index) => (
+              <Box key={index} sx={classes.days} component={Typography}>
+                {day}
+              </Box>
+            ))}
           </Box>
         </Box>
         <Box sx={classes.lowerSectionWrapper}>
@@ -129,7 +134,7 @@ const SitterDetailedCard = () => {
         </Box>
       </Card>
       <Box sx={classes.sideCardWrapper}>
-        <SideCard />
+        <SideCard price={price} />
       </Box>
     </Box>
   );

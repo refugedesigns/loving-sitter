@@ -1,7 +1,10 @@
 import { SxProps } from "@mui/system";
 import { Theme } from "@mui/material/styles";
 export const cardWrapper: SxProps<Theme> = {
-  maxWidth: { xs: 400, md: 300 },
+  maxWidth: { sm: 400 },
+  width: {xs: "100%", md: 350},
+  justifySelf: "flex-start",
+  m: 2,
 } as const;
 
 export const userInfoWrapper: SxProps<Theme> = {
@@ -9,7 +12,10 @@ export const userInfoWrapper: SxProps<Theme> = {
   flexDirection: { xs: "row", md: "column" },
   alignItems: { xs: "center" },
   px: {xs: 2},
-  pt: {xs: 4, md: 5}
+  pt: {xs: 4, md: 5},
+  [`: hover`]: {
+    cursor: "pointer"
+  }
 } as const;
 
 export const avatar: SxProps<Theme> = {
@@ -28,7 +34,6 @@ export const title: SxProps<Theme> = {
 } as const;
 
 export const profession: SxProps<Theme> = {
-  fontWeight: "bold",
   color: "#c0c0c0",
   letterSpacing: "1px",
   textAlign: {md: "center"}

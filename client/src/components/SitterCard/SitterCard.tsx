@@ -1,16 +1,33 @@
 import { Card, Avatar, Typography, Box } from "@mui/material";
 import { Star, LocationOn } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import * as classes from "./useStyles";
 
-const SitterCard = () => {
+interface Props {
+  name: string;
+  profilePhoto: string;
+  location: string;
+  price: number;
+  id: string;
+}
+
+const SitterCard: React.FC<Props> = ({
+  name,
+  profilePhoto,
+  location,
+  price,
+  id
+}) => {
+  const navigate = useNavigate()
+
   return (
-    <Card sx={classes.cardWrapper} raised>
+    <Card onClick={() => navigate(`/dogsitters/${id}`)} sx={classes.cardWrapper} raised>
       <Box sx={classes.userInfoWrapper}>
-        <Box sx={classes.avatar} component={Avatar} />
+        <Box sx={classes.avatar} component={Avatar} src={profilePhoto} />
         <Box sx={classes.textContent}>
           <Box sx={classes.title} variant="h5" component={Typography}>
             {" "}
-            Hatchy Hatchways
+            {name}
           </Box>
           <Box sx={classes.profession} component={Typography}>
             {" "}
@@ -32,11 +49,11 @@ const SitterCard = () => {
         <Box sx={classes.locationWrapper}>
           <Box sx={classes.locationIcon} component={LocationOn} />
           <Box sx={classes.locationText} component={Typography}>
-            Kamloops
+            {location}
           </Box>
         </Box>
         <Box sx={classes.price} component={Typography}>
-          $30/hr
+          $ {price}/hr
         </Box>
       </Box>
     </Card>

@@ -15,11 +15,15 @@ import OtherUserBubble from "../../components/Messenger/OtherUserBubble/OtherUse
 import CurrentUserBubble from "../../components/Messenger/CurrentUserBubble/CurrentUserBubble";
 import * as classes from "./useStyles";
 
-const Messages = () => {
+interface Props {
+  handleOpenModal: () => void;
+}
+
+const Messages: React.FC<Props> = ({handleOpenModal}) => {
   return (
     <Box sx={classes.pageWrapper}>
       <CssBaseline />
-      <AuthHeader />
+      <AuthHeader handleOpenModal={handleOpenModal}/>
       <Box sx={classes.mainWrapper} maxWidth="xl">
         <Box sx={classes.sidebarWrapper}>
           <Card sx={classes.sidebarText} square>

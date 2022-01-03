@@ -11,3 +11,15 @@ export const searcWrapper: SxProps<Theme> = {
 export const resultText: SxProps<Theme> = {
   fontWeight: "bold"
 }as const
+
+export const dogsittersWrapper: SxProps<Theme> = {
+  bgcolor: "green",
+  display: "flex",
+  flexWrap: "wrap",
+  justifyContent: "center",
+};
+
+export const dogsitterCard: SxProps<Theme> = {
+  bgcolor: "red",
+  alignSelf: "start"
+}

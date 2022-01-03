@@ -1,22 +1,46 @@
+import { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Container, Box, Typography, CssBaseline } from "@mui/material";
+import { Container, Box, CircularProgress, CssBaseline } from "@mui/material";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import * as classes from "./useStyles";
 import ProfileEdit from "../../components/ProfileEdit/ProfileEdit";
-import ProfilePhoto from "../../components/ProfilePhoto/ProfilePhoto"
-import AvailabilityCard from "../../components/AvailabilityCard/AvailabilityCard";
+import ProfilePhoto from "../../components/ProfilePhoto/ProfilePhoto";
 import PaymentCard from "../../components/PaymentCard/PaymentCard";
 import { Routes, Route } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../store/hooks";
+import { useCookiesLogin } from "../../helpers/hooks/loginWithCookies";
 
-const Profile = () => {
+interface Props {
+  handleOpenModal: () => void;
+}
+
+const Profile: React.FC<Props> = ({handleOpenModal}) => {
+  const { isLoading, error, cookiesLogin: loadUser } = useCookiesLogin();
+  const loggedInUser = useAppSelector((state) => state.users);
   const location = useLocation();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    loadUser()
+    if (error) {
+      navigate("/dogsitters");
+    }
+    console.log(loggedInUser);
+  }, [loadUser, error, navigate]);
+
+  if (isLoading) {
+    return (
+      <Container>
+        <CircularProgress color="primary" />
+      </Container>
+    );
+  }
 
   return (
     <Box>
       <CssBaseline />
-      <AuthHeader />
+      <AuthHeader handleOpenModal={handleOpenModal} />
       <Container sx={classes.containerWrapper} maxWidth="lg">
         <Box sx={classes.items}>
           <Box
@@ -40,9 +64,6 @@ const Profile = () => {
           >
             Image Gallery
           </Box>
-          <Box sx={classes.linkItem} component={NavLink} to="/profile/availability">
-            Availability
-          </Box>
           <Box sx={classes.linkItem} component={NavLink} to="/profile/payment">
             Payment
           </Box>
@@ -57,7 +78,6 @@ const Profile = () => {
           <Routes>
             <Route path="/" element={<ProfileEdit />} />
             <Route path="/photo" element={<ProfilePhoto />} />
-            <Route path="/availability" element={<AvailabilityCard />} />
             <Route path="/payment" element={<PaymentCard />} />
           </Routes>
         </Box>

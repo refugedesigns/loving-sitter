@@ -11,7 +11,7 @@ const login = async(email: string, password: string): Promise<AuthApiData> => {
     credentials: "include"
   }
 
-  return await fetch("/auth/login", fetchOptions).then(res => res.json()).catch(() => ({
+  return await fetch(`${process.env.REACT_APP_BACKEND}/auth/login`, fetchOptions).then(res => res.json()).catch(() => ({
     error: {message: "Unable to connect to server. Please try again."}
   }))
 }

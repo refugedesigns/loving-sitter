@@ -6,12 +6,16 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Star } from "@mui/icons-material";
 import * as classes from "./useStyles";
 
-const SideCard = () => {
+interface Props {
+  price: number
+}
+
+const SideCard: React.FC<Props> = ({price}) => {
   const [value, setValue] = useState<Date | null>(null);
   return (
     <Card sx={classes.cardWrapper} raised>
       <Box sx={classes.price} variant="h5" component={Typography}>
-        $30/hr
+        $ {price}/hr
       </Box>
       <Box sx={classes.starsWrapper}>
         {Array(5)
