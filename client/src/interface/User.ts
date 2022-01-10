@@ -1,4 +1,5 @@
 import { Availability } from "./Availability";
+import { Review } from "./Review"
 
 export interface User {
   _id: string;
@@ -15,4 +16,5 @@ export interface User {
   phone?: string;
   about?: string;
   city?: string;
+  reviews?: Review[];
 }

@@ -108,6 +108,7 @@ export const reviewUsername: SxProps<Theme> = {
 export const starsWrapper: SxProps<Theme> = {
   my: 2,
   display: "flex",
+  alignItems: "center"
 } as const;
 
 export const stars: SxProps<Theme> = {
@@ -118,3 +119,32 @@ export const stars: SxProps<Theme> = {
 export const lowerSectionWrapper: SxProps<Theme> = {
   p: 4,
 } as const;
+
+export const reviewWrapper: SxProps<Theme> = {
+  display: "flex",
+  alignItems: "flex-start",
+  mt: 4
+}
+
+export const reviewImage: SxProps<Theme> = {
+  mr: 2
+}
+
+export const reviewUser: SxProps<Theme> = {
+  fontWeight: "bold"
+}
+
+export const reviewStars: SxProps<Theme> = {
+  my: "5px",
+  display: "flex",
+  alignItems: "center"
+}
+
+export const reviewMessage: SxProps<Theme> = {
+  fontSize: "14px"
+}
+
+export const reviewTime: SxProps<Theme> = {
+  fontSize: "14px",
+  ml: 2
+}

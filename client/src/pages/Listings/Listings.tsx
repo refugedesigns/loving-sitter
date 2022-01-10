@@ -34,7 +34,7 @@ const Listings: React.FC<Props> = ({ handleOpenModal }) => {
         console.log(error);
       });
   }, []);
-
+  console.log(dogsitters)
   return (
     <>
       <CssBaseline />
@@ -54,6 +54,7 @@ const Listings: React.FC<Props> = ({ handleOpenModal }) => {
             location={dogsitter.city!}
             price={dogsitter.price!}
             id={dogsitter._id}
+            reviews={dogsitter.reviews}
           />
         ))}
       </Container>

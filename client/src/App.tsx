@@ -18,6 +18,7 @@ import registerSitter from "./helpers/APICalls/register-sitter";
 import { addUser } from "./store/usersSlice";
 import { useAppDispatch } from "./store/hooks";
 
+
 function App() {
   const [openModal, setOpenModal] = useState(false);
   const handleOpenModal = () => setOpenModal(true);
@@ -78,7 +79,7 @@ function App() {
         }
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
         console.error({ error: "Unexpected error! please try again." });
       });
   };

@@ -9,7 +9,7 @@ const fetchDogsitter = async (id: string): Promise<AuthApiData> => {
   };
 
   return await fetch(
-    `${process.env.REACT_APP_BACKEND}/dogsitter/${id}`,
+    `${process.env.REACT_APP_BACKEND}/dogsitters/${id}`,
     fetchOptions
   )
     .then((res) => res.json())

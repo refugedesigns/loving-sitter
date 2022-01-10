@@ -4,25 +4,27 @@ import { DatePicker, TimePicker } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Star } from "@mui/icons-material";
+import { Rating } from "react-simple-star-rating";
+import { Review } from "../../../../interface/Review";
+import sumRating from "../../../../utils/ratings";
 import * as classes from "./useStyles";
 
 interface Props {
-  price: number
+  price: number;
+  reviews?: Review[];
 }
 
-const SideCard: React.FC<Props> = ({price}) => {
+const SideCard: React.FC<Props> = ({ price, reviews }) => {
   const [value, setValue] = useState<Date | null>(null);
+  const finalRating = sumRating(reviews)
+  console.log(finalRating);
   return (
     <Card sx={classes.cardWrapper} raised>
       <Box sx={classes.price} variant="h5" component={Typography}>
         $ {price}/hr
       </Box>
       <Box sx={classes.starsWrapper}>
-        {Array(5)
-          .fill(null)
-          .map((_, i) => (
-            <Box sx={classes.stars} component={Star} key={i} />
-          ))}
+        <Rating ratingValue={finalRating as number} readonly />
       </Box>
       <Box>
         <Box component={Typography}>Drop-in</Box>
@@ -88,7 +90,9 @@ const SideCard: React.FC<Props> = ({price}) => {
           />
         </LocalizationProvider>
       </Box>
-      <Button sx={classes.requestButton} variant="contained" disableElevation>Send Request</Button>
+      <Button sx={classes.requestButton} variant="contained" disableElevation>
+        Send Request
+      </Button>
       <Button sx={classes.messageButton} variant="contained" disableElevation>
         Message
       </Button>
