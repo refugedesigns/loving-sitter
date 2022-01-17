@@ -12,24 +12,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseModel = void 0;
 const mongoose_1 = require("mongoose");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const baseOptions = {
+    discriminator: "_key",
+    collections: "users",
+    timestamps: true,
+};
+exports.BaseModel = (0, mongoose_1.model)("BaseModel", new mongoose_1.Schema({}, baseOptions));
 const BaseUserSchema = new mongoose_1.Schema({
-    firstName: {
+    name: {
         type: String,
-        required: true
-    },
-    lastName: {
-        type: String,
-        required: true
+        required: true,
     },
     email: {
         type: String,
-        required: true
+        required: true,
     },
     password: {
         type: String,
-        required: true
+        required: true,
+    },
+    isDogsitter: {
+        type: Boolean,
+        default: false
     },
     city: String,
     address: String,
@@ -37,11 +44,13 @@ const BaseUserSchema = new mongoose_1.Schema({
     profilePhoto: String,
     about: String,
     payments: [],
-    imageGallery: [{
+    imageGallery: [
+        {
             type: mongoose_1.Schema.Types.ObjectId,
-            ref: "Image"
-        }]
-}, { timestamps: true, collection: "users", discriminatorKey: "type" });
+            ref: "Image",
+        },
+    ],
+});
 BaseUserSchema.methods.matchPassword = function (enteredPassword) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield bcrypt_1.default.compare(enteredPassword, this.password);
@@ -56,5 +65,5 @@ BaseUserSchema.pre("save", function (next) {
         this.password = yield bcrypt_1.default.hash(this.password, salt);
     });
 });
-const BaseUser = (0, mongoose_1.model)("BaseUser", BaseUserSchema);
+const BaseUser = exports.BaseModel.discriminator("BaseUser", BaseUserSchema);
 exports.default = BaseUser;

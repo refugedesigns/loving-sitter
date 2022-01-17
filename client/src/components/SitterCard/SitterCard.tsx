@@ -1,27 +1,49 @@
 import { Card, Avatar, Typography, Box } from "@mui/material";
 import { Star, LocationOn } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { Review } from "../../interface/Review";
+import { Rating } from "react-simple-star-rating";
+import sumRating from "../../utils/ratings";
 import * as classes from "./useStyles";
 
-const SitterCard = () => {
+interface Props {
+  name: string;
+  profilePhoto: string;
+  location: string;
+  price: number;
+  id: string;
+  reviews?: Review[];
+}
+
+const SitterCard: React.FC<Props> = ({
+  name,
+  profilePhoto,
+  location,
+  price,
+  id,
+  reviews,
+}) => {
+  const navigate = useNavigate();
+  const finalRating = sumRating(reviews);
   return (
-    <Card sx={classes.cardWrapper} raised>
+    <Card
+      onClick={() => navigate(`/dogsitters/${id}`)}
+      sx={classes.cardWrapper}
+      raised
+    >
       <Box sx={classes.userInfoWrapper}>
-        <Box sx={classes.avatar} component={Avatar} />
+        <Box sx={classes.avatar} component={Avatar} src={profilePhoto} />
         <Box sx={classes.textContent}>
           <Box sx={classes.title} variant="h5" component={Typography}>
             {" "}
-            Hatchy Hatchways
+            {name}
           </Box>
           <Box sx={classes.profession} component={Typography}>
             {" "}
             Professional Dog Sitter
           </Box>
           <Box sx={classes.starWrapper}>
-            {Array(5)
-              .fill(null)
-              .map((_, i) => (
-                <Box sx={classes.star} component={Star} key={i} />
-              ))}
+            <Rating size={25} ratingValue={finalRating as number} readonly />
           </Box>
         </Box>
       </Box>
@@ -32,11 +54,11 @@ const SitterCard = () => {
         <Box sx={classes.locationWrapper}>
           <Box sx={classes.locationIcon} component={LocationOn} />
           <Box sx={classes.locationText} component={Typography}>
-            Kamloops
+            {location}
           </Box>
         </Box>
         <Box sx={classes.price} component={Typography}>
-          $30/hr
+          $ {price}/hr
         </Box>
       </Box>
     </Card>

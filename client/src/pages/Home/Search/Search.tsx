@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Grid,
   Typography,
@@ -11,8 +12,21 @@ import { MenuTwoTone } from "@mui/icons-material";
 import SearchForm from "../SearchForm/SearchForm";
 import * as classes from "./useStyles";
 import logoImage from "../../../images/logo.png";
+import { Link } from "react-router-dom";
+import { useAppSelector } from "../../../store/hooks";
+import { useCookiesLogin } from "../../../helpers/hooks/loginWithCookies";
 
-const Search: React.FC = () => {
+interface Props {
+  handleOpenModal: () => void;
+}
+
+const Search: React.FC<Props> = ({ handleOpenModal }) => {
+  const loggedInUser = useAppSelector((state) => state.users);
+  const { cookiesLogin } = useCookiesLogin();
+
+  useEffect(() => {
+    cookiesLogin();
+  }, []);
   return (
     <Grid sx={classes.root} component="main" container>
       <CssBaseline />
@@ -34,18 +48,51 @@ const Search: React.FC = () => {
           </Box>
         </Box>
       </Grid>
-      <Grid xs={0} md={6} component={Paper} square>
+      <Grid item xs={0} md={6} component={Paper} square>
         <Box sx={classes.bgImage} component={Paper} square>
           <Box sx={classes.buttonsWrapper}>
-            <Box sx={classes.sitterLink} variant="text" component={Button}>
-              Become a sitter
-            </Box>
-            <Box sx={classes.loginButton} variant="outlined" component={Button}>
-              Login
-            </Box>
-            <Box sx={classes.signUpButton} variant="contained" component={Button}>
-              Sign Up
-            </Box>
+            {loggedInUser.email ? (
+              <>
+                {!loggedInUser.isDogsitter && (
+                  <Box
+                    onClick={handleOpenModal}
+                    sx={classes.sitterLink}
+                    variant="text"
+                    component={Button}
+                  >
+                    Become a sitter
+                  </Box>
+                )}
+                <Box
+                  sx={classes.loginButton}
+                  variant="outlined"
+                  component={Button}
+                >
+                  <Box sx={classes.link}>Logout</Box>
+                </Box>
+              </>
+            ) : (
+              <>
+                <Box
+                  sx={classes.loginButton}
+                  variant="outlined"
+                  component={Button}
+                >
+                  <Box sx={classes.link} component={Link} to="/login">
+                    Login
+                  </Box>
+                </Box>
+                <Box
+                  sx={classes.signUpButton}
+                  variant="contained"
+                  component={Button}
+                >
+                  <Box sx={classes.link} component={Link} to="/signup">
+                    Signup
+                  </Box>
+                </Box>
+              </>
+            )}
           </Box>
         </Box>
       </Grid>

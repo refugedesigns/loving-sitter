@@ -71,6 +71,11 @@ export const loginButton: SxProps<Theme> = {
   border: "1px solid #fff",
 } as const;
 
+export const  link: SxProps<Theme> ={
+  color: "#fff",
+  textDecoration: "none"
+}
+
 export const sitterLink: SxProps<Theme> = {
   color: "#fff",
   height: 50,
