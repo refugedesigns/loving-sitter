@@ -1,86 +1,44 @@
 import { Schema, model } from "mongoose";
 import { AvailabilityDays } from "../interface";
 
+const AvailabilitySchema = new Schema<AvailabilityDays>(
+  {
+    monday: {
+      type: Boolean,
+      default: false,
+    },
+    tuesday: {
+      type: Boolean,
+      default: false,
+    },
+    wednesday: {
+      type: Boolean,
+      default: false,
+    },
+    thursday: {
+      type: Boolean,
+      default: false,
+    },
+    friday: {
+      type: Boolean,
+      default: false,
+    },
+    saturday: {
+      type: Boolean,
+      default: false,
+    },
+    sunday: {
+      type: Boolean,
+      default: false,
+    },
+    creator: {
+      type: Schema.Types.ObjectId,
+      ref: "DogSitter",
+    },
+  },
+  { timestamps: true }
+);
 
-const AvailabilitySchema = new Schema<AvailabilityDays>({
-  monday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  tuesday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  wednesday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  thursday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  friday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  saturday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  sunday: {
-    isAvailable: {
-      type: Boolean,
-      default: false
-    },
-    time: {
-      from: undefined,
-      to: undefined
-    }
-  },
-  creator: {
-    type: Schema.Types.ObjectId,
-    ref: "DogSitter"
-  }
-}, {timestamps: true})
+const Availability = model("Availability", AvailabilitySchema);
 
-const Availabilty = model("Availabilty", AvailabilitySchema)
-
-export default Availabilty
-
-
+export default Availability;

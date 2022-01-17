@@ -15,6 +15,20 @@ export const validateRegister = [
   }
 ]
 
+export const validateDogsitter = [
+  check("isAvailable", "Please provide availability options").not().isEmpty(),
+  check("availability", "Please provide available days").not().isEmpty().isObject(),
+  check("price", "Please enter a valid number for the price").isNumeric().not().isEmail(),
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()) {
+      return res.status(422).json({errors: errors.array()})
+    }
+      next()
+  }
+]
+
 export const validateLogin = [
   check("email", "Please enter a valid email address").isEmail(),
   check("password", "Password is required").not().isEmpty(),

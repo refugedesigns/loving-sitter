@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateLogin = exports.validateRegister = void 0;
+exports.validateLogin = exports.validateDogsitter = exports.validateRegister = void 0;
 const express_validator_1 = require("express-validator");
 exports.validateRegister = [
     (0, express_validator_1.check)("name", "Please enter your name").not().isEmpty(),
@@ -11,6 +11,18 @@ exports.validateRegister = [
         console.log(errors);
         if (!errors.isEmpty())
             return res.status(422).json({ errors: errors.array() });
+        next();
+    }
+];
+exports.validateDogsitter = [
+    (0, express_validator_1.check)("isAvailable", "Please provide availability options").not().isEmpty(),
+    (0, express_validator_1.check)("availability", "Please provide available days").not().isEmpty().isObject(),
+    (0, express_validator_1.check)("price", "Please enter a valid number for the price").isNumeric().not().isEmail(),
+    (req, res, next) => {
+        const errors = (0, express_validator_1.validationResult)(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
         next();
     }
 ];

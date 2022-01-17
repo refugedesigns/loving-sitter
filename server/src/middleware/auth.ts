@@ -7,9 +7,9 @@ const protect: RequestHandler = (req, res, next) => {
   if(!token) return res.status(401).send("No token, authorization denied.")
 
   try {
-    const decoded = jwt.verify(token, <string>process.env.JWT_SECRET)
+    const decoded = jwt.verify(token, <string>process.env.JWT_SECRET) as { id: string; iat: number; exp: number}
     
-    req.userId = decoded
+    req.userId = decoded.id
   } catch (error) {
     res.status(401).send("Invalid token.")
   }

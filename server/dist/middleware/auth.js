@@ -10,7 +10,7 @@ const protect = (req, res, next) => {
         return res.status(401).send("No token, authorization denied.");
     try {
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        req.userId = decoded;
+        req.userId = decoded.id;
     }
     catch (error) {
         res.status(401).send("Invalid token.");

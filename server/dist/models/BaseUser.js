@@ -34,6 +34,10 @@ const BaseUserSchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    isDogsitter: {
+        type: Boolean,
+        default: false
+    },
     city: String,
     address: String,
     phoneNumber: String,

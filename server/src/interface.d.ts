@@ -1,11 +1,14 @@
 import { Express } from "express-serve-static-core";
-import { ObjectId, Document, Model, Types } from "mongoose"
-
+import { ObjectId, Document, Model, Types, Condition, Array } from "mongoose";
 
 export interface User {
   name: string;
   email: string;
   password: string;
+  isDogsitter: {
+    type: Types;
+    default: boolean;
+  };
   city?: string;
   address?: string;
   phoneNumber?: string;
@@ -14,82 +17,41 @@ export interface User {
   payments?: string[] | [] | undefined;
   imageGallery?: ObjectId[] | [] | undefined;
   isAvailable?: boolean;
-  availability?: string[] | undefined;
+  availability?: AvailabilityDays;
   price?: number;
+  reviews?: Review[]
 }
 
 export interface AvailabilityDays {
   monday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
   tuesday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
   wednesday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
   thursday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
   friday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
   saturday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
   sunday: {
-    isAvailable: {
-      type: Types;
-      default: boolean;
-    };
-    time: {
-      from?: string;
-      to?: string;
-    };
+    type: Types;
+    default: boolean;
   };
-  creator: {
+  creator?: {
     type: ObjectId;
     ref: string;
   };
@@ -97,12 +59,52 @@ export interface AvailabilityDays {
 
 export interface UserDocument extends User, Document {
   matchPassword(password: string): (enteredPassword: string) => boolean;
+  _doc: {
+    [key?: string]: string | number | boolean | string[] | [];
+  };
 }
 
 export interface UserModel extends Model<UserDocument> {}
+
+export interface ReviewDocument extends Review, Document {
+  _doc : {
+    [key?: string]: string | number | boolean;
+  }
+}
+
+export interface ReviewModel extends Model<ReviewDocument> {}
 
 export interface Image {
   url: string;
 }
 
+export interface Request {
+  sender: Condition<{ type: ObjectId; ref: string }>;
+  recipient: Condition<{ type: ObjectId; ref: string }>;
+  status: string;
+}
 
+export interface Review {
+  sender: Condition<{ type: ObjectId; ref: string }>;
+  recipient: Condition<{ type: ObjectId; ref: string }>;
+  message: {
+    type: string;
+    required: boolean;
+  };
+  rating: {
+    type: number;
+    required: true;
+  };
+}
+
+export interface Conversation {
+  members: Condition<{ type: Array}>;
+}
+
+export interface Message {
+  conversationId: Condition<{type: ObjectId; required: boolean}>;
+  sender: Condition<{type: ObjectId; ref: string}>;
+  recipient: Condition<{type: ObjectId; ref: string}>;
+  text: Condition<{type: Types; required: boolean}>;
+  read: Condition<{type: Types; default: boolean}>;
+}
