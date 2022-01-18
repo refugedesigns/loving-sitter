@@ -20,6 +20,7 @@ import * as Yup from "yup";
 import * as classes from "./useStyles";
 
 interface Props {
+  _id: string;
   name: string;
   location: string;
   availability: string[];
@@ -37,6 +38,7 @@ interface Props {
 }
 
 const SitterDetailedCard: React.FC<Props> = ({
+  _id,
   name,
   location,
   availability,
@@ -238,7 +240,7 @@ const SitterDetailedCard: React.FC<Props> = ({
         </Box>
       </Card>
       <Box sx={classes.sideCardWrapper}>
-        <SideCard price={price} reviews={reviews} />
+        <SideCard price={price} reviews={reviews} _id={_id} />
       </Box>
     </Box>
   );

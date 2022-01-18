@@ -9,3 +9,9 @@ export const card: SxProps<Theme> = {
   borderRadius: 7,
   boxShadow: 3
 }
+
+export const time: SxProps<Theme> = {
+  display: "flex",
+  justifyContent: "flex-end",
+  fontSize: '14px'
+}

@@ -11,6 +11,7 @@ import postReview from "../../helpers/APICalls/post-review";
 import openSocket from "socket.io-client"
 import moment from "moment";
 import * as classes from "./useStyles";
+import { dogsittersWrapper } from "../Listings/useStyles";
 
 interface Props {
   handleOpenModal: () => void;
@@ -51,7 +52,9 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
         setIsLoading(false);
       }
     });
-    const socket = openSocket("http://localhost:3001", {withCredentials: true})
+    const socket = openSocket(process.env.REACT_APP_SOCKET as string, {
+      withCredentials: true,
+    });
     
     socket?.on("review", (data) => {
       setReviews((prevReviews) => {
@@ -97,6 +100,7 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
       ) : (
         <Container sx={classes.pageWrapper} maxWidth="xl">
           <SitterDetailedCard
+            _id = {dogsitter?.user._id as string}
             name={dogsitter?.user.name!}
             location={dogsitter?.user.city!}
             price={dogsitter?.user.price!}

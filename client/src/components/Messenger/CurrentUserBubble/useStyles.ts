@@ -3,7 +3,7 @@ import { Theme } from "@mui/material/styles";
 
 export const message: SxProps<Theme> = {
   maxWidth: 400,
-  ml: 2,
+  m: 2,
   px: 4,
   py: 2,
   borderRadius: 7,
@@ -15,4 +15,10 @@ export const mainWrapper: SxProps<Theme> = {
   display: 'flex',
   alignItems: "center",
   mx: 4
+}
+
+export const time: SxProps<Theme> = {
+  display: "flex",
+  justifyContent: "flex-end",
+  fontSize: "14px"
 }

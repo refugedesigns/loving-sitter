@@ -21,6 +21,7 @@ const Signup: React.FC = () => {
   ) => {
     register(name, email, password).then((data) => {
       if (data.error) {
+        
         console.error({ error: data.error.message });
         setSubmitting(false);
       } else if (data.success) {
@@ -34,6 +35,7 @@ const Signup: React.FC = () => {
       }
     });
   };
+  
   return (
     <Box sx={classes.mainWrapper}>
       <CssBaseline />

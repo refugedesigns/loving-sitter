@@ -10,11 +10,12 @@ export const mainWrapper: SxProps<Theme> = {
   display: "flex",
   m: "0 auto",
   borderRight: "1px solid #dcdcdc",
+  height: "calc(100vh - 90px)"
 };
 
 export const sidebarWrapper: SxProps<Theme> = {
-  width: 300,
-  minHeight: "90vh",
+  flex: 3,
+ height: "100%",
   overflow: "auto",
   boxShadow: 0,
   borderRight: "1px solid #dcdcdc",
@@ -22,9 +23,10 @@ export const sidebarWrapper: SxProps<Theme> = {
 };
 
 export const activeChartBox: SxProps<Theme> = {
-  flexGrow: 1,
+  flex: 9,
   display: "flex",
   flexDirection: "column",
+  height: "100%"
 };
 
 export const sidebarText: SxProps<Theme> = {
@@ -52,6 +54,12 @@ export const chartBox: SxProps<Theme> = {
   overflowY: "auto",
   display: "flex",
   flexDirection: "column"
+};
+
+export const chartBoxField: SxProps<Theme> = {
+  overflowY: "auto",
+  display: "flex",
+  flexDirection: "column",
 };
 
 export const chartInput: SxProps<Theme> = {

@@ -7,17 +7,27 @@ import { Star } from "@mui/icons-material";
 import { Rating } from "react-simple-star-rating";
 import { Review } from "../../../../interface/Review";
 import sumRating from "../../../../utils/ratings";
+import { useNavigate } from "react-router-dom";
 import * as classes from "./useStyles";
 
 interface Props {
+  _id: string;
   price: number;
   reviews?: Review[];
 }
 
-const SideCard: React.FC<Props> = ({ price, reviews }) => {
+const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
   const [value, setValue] = useState<Date | null>(null);
+  const navigate = useNavigate()
   const finalRating = sumRating(reviews)
-  console.log(finalRating);
+
+  const handleNavMessagePage = () => {
+    navigate({
+      pathname: "/messages",
+      search: `?user=${_id}`
+    })
+  }
+  
   return (
     <Card sx={classes.cardWrapper} raised>
       <Box sx={classes.price} variant="h5" component={Typography}>
@@ -93,7 +103,7 @@ const SideCard: React.FC<Props> = ({ price, reviews }) => {
       <Button sx={classes.requestButton} variant="contained" disableElevation>
         Send Request
       </Button>
-      <Button sx={classes.messageButton} variant="contained" disableElevation>
+      <Button onClick={handleNavMessagePage} sx={classes.messageButton} variant="contained" disableElevation>
         Message
       </Button>
     </Card>
