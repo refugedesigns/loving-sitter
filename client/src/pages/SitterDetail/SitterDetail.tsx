@@ -8,10 +8,11 @@ import { useLocation } from "react-router-dom";
 import { AuthApiDataSuccess } from "../../interface/AuthApiData";
 import { Review } from "../../interface/Review";
 import postReview from "../../helpers/APICalls/post-review";
-import openSocket from "socket.io-client"
+import openSocket from "socket.io-client";
 import moment from "moment";
+import { fetchRecipientConv } from "../../helpers/APICalls/conversations";
+import { Conversation } from "../../interface/conversations";
 import * as classes from "./useStyles";
-import { dogsittersWrapper } from "../Listings/useStyles";
 
 interface Props {
   handleOpenModal: () => void;
@@ -26,7 +27,6 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
   const { cookiesLogin: loadUser } = useCookiesLogin();
   const location = useLocation();
   const id = location.pathname.split("/")[2];
-
 
   useEffect(() => {
     setIsLoading(true);
@@ -47,7 +47,7 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
         setReviews(data.success.user.reviews?.reverse());
         setError(false);
         setIsLoading(false);
-      } else if (data.error) {
+      } else {
         setError(true);
         setIsLoading(false);
       }
@@ -55,7 +55,7 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
     const socket = openSocket(process.env.REACT_APP_SOCKET as string, {
       withCredentials: true,
     });
-    
+
     socket?.on("review", (data) => {
       setReviews((prevReviews) => {
         let reviews = prevReviews || [];
@@ -66,10 +66,9 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
     });
 
     return () => {
-      setReviews([])
-    }
+      setReviews([]);
+    };
   }, []);
-
 
   const handleSubmit = ({
     rating,
@@ -100,7 +99,7 @@ const SitterDetail: React.FC<Props> = ({ handleOpenModal }) => {
       ) : (
         <Container sx={classes.pageWrapper} maxWidth="xl">
           <SitterDetailedCard
-            _id = {dogsitter?.user._id as string}
+            _id={id}
             name={dogsitter?.user.name!}
             location={dogsitter?.user.city!}
             price={dogsitter?.user.price!}

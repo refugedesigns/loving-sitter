@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecipient = exports.getConversation = exports.createConversation = void 0;
+exports.getConversationById = exports.getRecipientConv = exports.getRecipient = exports.getConversation = exports.createConversation = void 0;
 const Conversation_1 = __importDefault(require("../models/Conversation"));
 const DogSitter_1 = __importDefault(require("../models/DogSitter"));
 const BaseUser_1 = __importDefault(require("../models/BaseUser"));
@@ -25,34 +25,61 @@ exports.createConversation = (0, express_async_handler_1.default)((req, res, nex
         members: [req.userId, recipientId],
     });
     res.status(201).json({
-        success: {
-            conversation,
-        },
+        success: [conversation],
     });
 }));
 exports.getConversation = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.params;
+    const newUserId = new mongoose_1.default.Types.ObjectId(userId);
     const conversation = yield Conversation_1.default.find({
-        members: { $in: [new mongoose_1.default.Types.ObjectId(userId)] },
+        members: { $in: [newUserId] },
     });
     if (!conversation) {
         throw new customError_1.StatusError("No conversation for this user", 400);
     }
     res.status(200).json({
-        success: [
-            ...conversation
-        ]
+        success: [...conversation],
     });
 }));
 exports.getRecipient = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.params;
-    const recipient = (yield DogSitter_1.default.findById(userId).select("name profilePhoto")) || (yield BaseUser_1.default.findById(userId));
+    const recipient = (yield DogSitter_1.default.findById(userId).select("name profilePhoto")) ||
+        (yield BaseUser_1.default.findById(userId));
     if (!recipient) {
         throw new customError_1.StatusError("This user is not in the database!", 404);
     }
     res.status(200).json({
         _id: recipient._doc._id,
         name: recipient._doc.name,
-        profilePhoto: recipient._doc.profilePhoto
+        profilePhoto: recipient._doc.profilePhoto,
+    });
+}));
+exports.getRecipientConv = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const conv = yield Conversation_1.default.find({
+        members: {
+            $all: [
+                new mongoose_1.default.Types.ObjectId(req.userId),
+                new mongoose_1.default.Types.ObjectId(id),
+            ],
+        },
+    });
+    if (conv.length > 0) {
+        res.status(200).json({
+            success: [...conv],
+        });
+    }
+    else {
+        res.status(404).json({ error: "Conversation not available" });
+    }
+}));
+exports.getConversationById = (0, express_async_handler_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { convId } = req.params;
+    const conv = yield Conversation_1.default.findById(new mongoose_1.default.Types.ObjectId(convId));
+    if (!conv) {
+        throw new customError_1.StatusError("No conversation available", 404);
+    }
+    res.status(200).json({
+        success: [conv]
     });
 }));

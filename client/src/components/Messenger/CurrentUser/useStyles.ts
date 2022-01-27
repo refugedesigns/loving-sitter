@@ -25,6 +25,16 @@ export const active: SxProps<Theme> = {
   border: "2px solid #fff",
   bgcolor: 'green'
 }
+export const offline: SxProps<Theme> = {
+  color: "gray",
+  width: 15,
+  height: 15,
+  position: "absolute",
+  left: 35,
+  bottom: 0,
+  border: "2px solid #fff",
+  bgcolor: 'gray'
+}
 
 export const username: SxProps<Theme> ={
   ml: 2,

@@ -13,7 +13,6 @@ export const resultText: SxProps<Theme> = {
 }as const
 
 export const dogsittersWrapper: SxProps<Theme> = {
-  bgcolor: "green",
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "center",

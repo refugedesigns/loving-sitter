@@ -8,5 +8,6 @@ const message_1 = require("../controllers/message");
 const auth_1 = __importDefault(require("../middleware/auth"));
 const router = (0, express_1.Router)();
 router.route("/").post(auth_1.default, message_1.createMessage);
+router.route("/").patch(auth_1.default, message_1.updateMessages);
 router.route("/:conversationId").get(auth_1.default, message_1.getMessages);
 exports.default = router;

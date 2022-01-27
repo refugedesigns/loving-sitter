@@ -98,8 +98,16 @@ export interface Review {
 }
 
 export interface Conversation {
-  members: Condition<{ type: Array}>;
+  members: ObjectId[];
 }
+
+export interface ConversationDocument extends Conversation, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface ConversationModel extends Model<ConversationDocument>{}
 
 export interface Message {
   conversationId: Condition<{type: ObjectId; required: boolean}>;
@@ -108,3 +116,24 @@ export interface Message {
   text: Condition<{type: Types; required: boolean}>;
   read: Condition<{type: Types; default: boolean}>;
 }
+
+export interface MessageDocument extends Message, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface MessageModel extends Model<MessageDocument>{}
+
+export interface Socket {
+  socketId: Condition<{type: string; required: boolean}>;
+  userId: Condition<{type: string; required: boolean}>;
+}
+
+export interface SocketDocument extends Socket, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface SocketModel extends Model<SocketDocument>{}

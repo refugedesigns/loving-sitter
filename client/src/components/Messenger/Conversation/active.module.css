@@ -1,0 +1,17 @@
+.highlighted {
+    background-color: #dfdfdf;
+}
+
+.mainWrapper {
+    display: flex;
+    align-items: center;
+    padding: 1;
+    padding: 2, 0;
+    text-decoration: none;
+}
+
+.mainWrapper:hover {
+    background-color: #dfdfdf;
+    cursor: pointer;
+}
+
