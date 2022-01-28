@@ -1,5 +1,5 @@
 import { Express } from "express-serve-static-core";
-import { ObjectId, Document, Model, Types, Condition, Array } from "mongoose";
+import { ObjectId, Document, Model, Types, Condition, Array, Date } from "mongoose";
 
 export interface User {
   name: string;
@@ -81,8 +81,18 @@ export interface Image {
 export interface Request {
   sender: Condition<{ type: ObjectId; ref: string }>;
   recipient: Condition<{ type: ObjectId; ref: string }>;
+  dropinDate: Condition<{ type: Date; required: boolean }>;
+  dropoffDate: Condition<{ type: Date; required: boolean }>;
   status: string;
 }
+
+export interface RequestDocument extends Request, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface RequestModel extends Model<RequestDocument> {}
 
 export interface Review {
   sender: Condition<{ type: ObjectId; ref: string }>;

@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Card, IconButton, Button, TextField } from "@mui/material";
 import { MoreHorizRounded } from "@mui/icons-material";
-import { Conversation as UserConversation } from "../../../interface/conversations";
 import CurrentUserBubble from "../CurrentUserBubble/CurrentUserBubble";
 import OtherUserBubble from "../OtherUserBubble/OtherUserBubble";
 import CurrentUser from "../CurrentUser/CurrentUser";
 import { useAppSelector } from "../../../store/hooks";
-import { getRecipient } from "../../../helpers/APICalls/conversations";
-import { updateMessages } from "../../../helpers/APICalls/messages";
 import useUpdateMessages from "../../../helpers/hooks/useUpdateMessages";
 import { Message } from "../../../interface/messages";
 import { Formik, FormikState } from "formik";
@@ -113,8 +110,6 @@ const ActiveChat: React.FC<Props> = ({
               values,
               touched,
               errors,
-              setFieldValue,
-              isSubmitting,
             }) => (
               <Box sx={classes.chartInput}>
                 <Box

@@ -9,12 +9,13 @@ import sumRating from "../../../../utils/ratings";
 import { useNavigate } from "react-router-dom";
 import {
   Conversation,
-  ConversationApiData,
 } from "../../../../interface/conversations";
 import {
   fetchRecipientConv,
   createConversation,
 } from "../../../../helpers/APICalls/conversations";
+import { Formik, FormikState } from "formik";
+import * as Yup from "yup";
 import * as classes from "./useStyles";
 
 interface Props {
@@ -26,10 +27,14 @@ interface Props {
 const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
   const [value, setValue] = useState<Date | null>(null);
   const [conv, setConv] = useState<Conversation[] | Array<Conversation>>([]);
-  const [error, setError] = useState<string>();
   const navigate = useNavigate();
   const finalRating = sumRating(reviews);
-  console.log(_id);
+  const initialValues = {
+    dropinDate: '',
+    dropinTime: '',
+    dropoffDate: '',
+    dropoffTime: ''
+  }
 
   const handleNavMessagePage = () => {
     let newConv: Conversation[] | Conversation;
@@ -73,6 +78,7 @@ const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
       <Box sx={classes.starsWrapper}>
         <Rating ratingValue={finalRating as number} readonly />
       </Box>
+      
       <Box>
         <Box component={Typography}>Drop-in</Box>
         <LocalizationProvider dateAdapter={DateAdapter}>
