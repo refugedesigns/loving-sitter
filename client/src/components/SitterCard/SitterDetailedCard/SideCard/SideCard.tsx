@@ -1,23 +1,75 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Card, Typography, Button, TextField } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import { Star } from "@mui/icons-material";
 import { Rating } from "react-simple-star-rating";
 import { Review } from "../../../../interface/Review";
 import sumRating from "../../../../utils/ratings";
+import { useNavigate } from "react-router-dom";
+import {
+  Conversation,
+} from "../../../../interface/conversations";
+import {
+  fetchRecipientConv,
+  createConversation,
+} from "../../../../helpers/APICalls/conversations";
+import { Formik, FormikState } from "formik";
+import * as Yup from "yup";
 import * as classes from "./useStyles";
 
 interface Props {
+  _id: string;
   price: number;
   reviews?: Review[];
 }
 
-const SideCard: React.FC<Props> = ({ price, reviews }) => {
+const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
   const [value, setValue] = useState<Date | null>(null);
-  const finalRating = sumRating(reviews)
-  console.log(finalRating);
+  const [conv, setConv] = useState<Conversation[] | Array<Conversation>>([]);
+  const navigate = useNavigate();
+  const finalRating = sumRating(reviews);
+  const initialValues = {
+    dropinDate: '',
+    dropinTime: '',
+    dropoffDate: '',
+    dropoffTime: ''
+  }
+
+  const handleNavMessagePage = () => {
+    let newConv: Conversation[] | Conversation;
+    if (conv.length === 0) {
+      createConversation(_id).then((data) => {
+        if (data.success) {
+          newConv = data.success as Conversation[];
+          console.log(newConv[0]._id);
+          navigate(`/messages/${newConv[0]._id}`);
+        }
+      });
+    } else {
+      console.log(conv);
+      console.log((conv as Conversation[])[0]._id);
+      navigate(`/messages/${(conv as Conversation[])[0]._id}`);
+    }
+  };
+  console.log(conv);
+  useEffect(() => {
+    fetchRecipientConv(_id)
+      .then((data) => {
+        if (data.success) {
+          setConv(data.success);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    return () => {
+      setConv([]);
+      setValue(null);
+    };
+  }, []);
+
   return (
     <Card sx={classes.cardWrapper} raised>
       <Box sx={classes.price} variant="h5" component={Typography}>
@@ -26,6 +78,7 @@ const SideCard: React.FC<Props> = ({ price, reviews }) => {
       <Box sx={classes.starsWrapper}>
         <Rating ratingValue={finalRating as number} readonly />
       </Box>
+      
       <Box>
         <Box component={Typography}>Drop-in</Box>
         <LocalizationProvider dateAdapter={DateAdapter}>
@@ -93,7 +146,12 @@ const SideCard: React.FC<Props> = ({ price, reviews }) => {
       <Button sx={classes.requestButton} variant="contained" disableElevation>
         Send Request
       </Button>
-      <Button sx={classes.messageButton} variant="contained" disableElevation>
+      <Button
+        onClick={handleNavMessagePage}
+        sx={classes.messageButton}
+        variant="contained"
+        disableElevation
+      >
         Message
       </Button>
     </Card>

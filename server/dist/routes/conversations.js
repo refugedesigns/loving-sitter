@@ -8,6 +8,8 @@ const conversations_1 = require("../controllers/conversations");
 const auth_1 = __importDefault(require("../middleware/auth"));
 const router = (0, express_1.Router)();
 router.route("/").post(auth_1.default, conversations_1.createConversation);
+router.route("/recipient/:id").get(auth_1.default, conversations_1.getRecipientConv);
 router.route("/user/:userId").get(auth_1.default, conversations_1.getRecipient);
+router.route("/conv/:convId").get(auth_1.default, conversations_1.getConversationById);
 router.route("/:userId").get(auth_1.default, conversations_1.getConversation);
 exports.default = router;

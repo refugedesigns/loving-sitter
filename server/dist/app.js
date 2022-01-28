@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -16,6 +25,7 @@ const auth_1 = __importDefault(require("./routes/auth"));
 const dogsitters_1 = __importDefault(require("./routes/dogsitters"));
 const conversations_1 = __importDefault(require("./routes/conversations"));
 const message_1 = __importDefault(require("./routes/message"));
+const Socket_1 = __importDefault(require("./models/Socket"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
@@ -29,27 +39,42 @@ const io = new socket_io_1.default.Server(server, {
         credentials: true,
     },
 });
-let users = [];
-const addUsers = (userId, socketId) => {
-    userId !== "" && !users.some((user) => user.userId === userId) &&
-        users.push({ userId, socketId });
-};
-const removeUser = (socketId) => {
-    users = users.filter(user => user.socketId !== socketId);
-};
-const getUser = (userId) => {
-    return users.find(user => user.userId === userId);
-};
+const addUsers = (userId, socketId) => __awaiter(void 0, void 0, void 0, function* () {
+    //  userId !== "" && !users.some((user) => user.userId === userId) &&
+    //     users.push({ userId, socketId });
+    const existingSocket = yield Socket_1.default.findOne({ userId: userId });
+    if (existingSocket) {
+        yield existingSocket.delete();
+    }
+    yield Socket_1.default.create({
+        socketId,
+        userId
+    });
+});
+const removeUser = (socketId) => __awaiter(void 0, void 0, void 0, function* () {
+    // users = users.filter(user => user.socketId !== socketId)
+    yield Socket_1.default.findOneAndDelete({ socketId: socketId });
+});
+const getUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield Socket_1.default.findOne({ userId: userId });
+    return {
+        socketId: user === null || user === void 0 ? void 0 : user.socketId,
+        userId: user === null || user === void 0 ? void 0 : user.userId
+    };
+});
 io.on("connection", (socket) => {
     console.log("client connected");
     // take userId and socketId from user
-    socket.on("addUser", (userId) => {
-        addUsers(userId, socket.id);
+    socket.on("addUser", (userId) => __awaiter(void 0, void 0, void 0, function* () {
+        yield addUsers(userId, socket.id);
+        const users = yield Socket_1.default.find();
         io.emit("getUsers", users);
-    });
+        console.log("Added User");
+        console.log(users);
+    }));
     // Send and get message
-    socket.on("sendMessage", ({ _id, createdAt, updatedAt, conversationId, sender, read, recipient, text, }) => {
-        const user = getUser(recipient);
+    socket.on("sendMessage", ({ _id, createdAt, updatedAt, conversationId, sender, read, recipient, text, }) => __awaiter(void 0, void 0, void 0, function* () {
+        const user = yield getUser(recipient);
         io.to(user === null || user === void 0 ? void 0 : user.socketId).emit("getMessage", {
             _id,
             conversationId,
@@ -60,12 +85,17 @@ io.on("connection", (socket) => {
             text: text,
             updatedAt
         });
-    });
+        console.log(`message received, sending to ${user.socketId}`);
+    }));
     // remove user after disconnect
-    socket.on("disconnect", () => {
-        console.log(`A user with ${socket.id} is disconnected`);
-        removeUser(socket.id);
-        io.emit("getUsers", users);
+    socket.on("disconnect", function () {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield removeUser(socket.id);
+            const users = yield Socket_1.default.find();
+            io.emit("removeUser", users);
+            console.log("disconnected " + socket.id);
+            console.log(users);
+        });
     });
 });
 const port = parseInt(process.env.PORT, 10) || 8080;

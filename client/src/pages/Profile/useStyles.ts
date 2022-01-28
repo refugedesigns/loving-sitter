@@ -25,7 +25,7 @@ export const linkItem = {
   whiteSpace: "nowrap",
   fontSize: { lg: "1.5rem" },
   textDecoration: "none",
-  [`:active`]: {
+  [`&:active`]: {
     color: "black",
   },
   [`:hover`]: {

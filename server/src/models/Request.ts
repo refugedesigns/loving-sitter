@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
-import { Request } from "src/interface";
+import { Schema, model, Model } from "mongoose";
+import { Request, RequestModel } from "src/interface";
 
-const RequestSchema = new Schema<Request>(
+const RequestSchema: Schema<Request, Model<RequestModel>> = new Schema(
   {
     sender: {
       type: Schema.Types.ObjectId,
@@ -10,6 +10,14 @@ const RequestSchema = new Schema<Request>(
     recipient: {
       type: Schema.Types.ObjectId,
       ref: "DogSitter",
+    },
+    dropinDate: {
+      type: Date,
+      required: true
+    },
+    dropoffDate: {
+      type: Date,
+      required: true
     },
     status: {
         type: String,

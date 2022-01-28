@@ -1,13 +1,23 @@
-import { Schema, model } from "mongoose";
-import { Conversation } from "../interface";
+import { SecureClientSessionOptions } from "http2";
+import { Schema, model, SchemaTypes, Model } from "mongoose";
+import {
+  Conversation,
+  ConversationModel,
+  ConversationDocument,
+} from "../interface";
 
-const conversationSchema: Schema = new Schema<Conversation>(
+const conversationSchema: Schema<Conversation, Model<ConversationModel>> = new Schema(
   {
-    members: Array,
+    members: [{
+      type: SchemaTypes.ObjectId
+    }],
   },
   { timestamps: true }
 );
 
-const conversation = model("Conversation", conversationSchema);
+const conversation = model(
+  "Conversation",
+  conversationSchema
+);
 
 export default conversation;

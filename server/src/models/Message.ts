@@ -1,7 +1,7 @@
-import { Schema, model } from "mongoose";
-import { Message } from "../interface";
+import { Schema, model, Model } from "mongoose";
+import { Message, MessageModel } from "../interface";
 
-const messageSchema: Schema = new Schema<Message>({
+const messageSchema: Schema<Message, Model<MessageModel>> = new Schema({
     conversationId: {
         type: Schema.Types.ObjectId,
         required: true

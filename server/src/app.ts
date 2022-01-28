@@ -11,6 +11,7 @@ import authRoutes from "./routes/auth";
 import dogsitterRoutes from "./routes/dogsitters";
 import conversationRoutes from "./routes/conversations";
 import messagesRoutes from "./routes/message";
+import Socket from "./models/Socket"
 
 declare module "express-serve-static-core" {
   interface Request {
@@ -43,35 +44,49 @@ const io = new socket.Server(server, {
   },
 });
 
-let users: { userId: string; socketId: string }[] = [];
 
-const addUsers = (userId: string, socketId: string) => {
- userId !== "" && !users.some((user) => user.userId === userId) &&
-    users.push({ userId, socketId });
+
+const addUsers = async(userId: string, socketId: string) => {
+//  userId !== "" && !users.some((user) => user.userId === userId) &&
+//     users.push({ userId, socketId });
+  const existingSocket = await Socket.findOne({userId: userId})
+  if(existingSocket) {
+     await existingSocket.delete()
+    } 
+  await Socket.create({
+    socketId,
+    userId
+  })
 };
 
-const removeUser = (socketId: string) => {
-  users = users.filter(user => user.socketId !== socketId)
+const removeUser = async(socketId: string) => {
+  // users = users.filter(user => user.socketId !== socketId)
+  await Socket.findOneAndDelete({socketId: socketId}) 
 }
 
-const getUser = (userId: string) => {
-  return users.find(user => user.userId === userId)
+const getUser = async(userId: string): Promise<{socketId: string; userId: string}> => {
+  const user = await Socket.findOne({userId: userId})
+  return {
+    socketId: user?.socketId,
+    userId: user?.userId
+  }
 }
 
 io.on("connection", (socket) => {
   console.log("client connected");
 
   // take userId and socketId from user
-  socket.on("addUser", (userId) => {
-    addUsers(userId, socket.id);
-
+  socket.on("addUser", async(userId) => {
+    await addUsers(userId, socket.id);
+    const users = await Socket.find()
     io.emit("getUsers", users);
+    console.log("Added User")
+    console.log(users)
   });
-
   // Send and get message
   socket.on(
     "sendMessage",
-    ({
+    async({
       _id,
       createdAt,
       updatedAt,
@@ -90,7 +105,7 @@ io.on("connection", (socket) => {
       recipient: string;
       text: string;
     }) => {
-      const user = getUser(recipient) as { userId: string; socketId: string };
+      const user = await getUser(recipient);
       io.to(user?.socketId).emit("getMessage", {
         _id,
         conversationId,
@@ -101,15 +116,18 @@ io.on("connection", (socket) => {
         text: text,
         updatedAt
       })
+      console.log(`message received, sending to ${user.socketId}`)
     }
   ); 
 
   // remove user after disconnect
-  socket.on("disconnect", () => {
-    console.log(`A user with ${socket.id} is disconnected`)
-    removeUser(socket.id)
-
-    io.emit("getUsers", users);
+  socket.on("disconnect", async function() {
+    
+    await removeUser(socket.id)
+    const users = await Socket.find()
+    io.emit("removeUser", users);
+    console.log("disconnected " + socket.id)
+    console.log(users)
   })
 });
 

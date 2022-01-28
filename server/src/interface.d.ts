@@ -1,5 +1,5 @@
 import { Express } from "express-serve-static-core";
-import { ObjectId, Document, Model, Types, Condition, Array } from "mongoose";
+import { ObjectId, Document, Model, Types, Condition, Array, Date } from "mongoose";
 
 export interface User {
   name: string;
@@ -81,8 +81,18 @@ export interface Image {
 export interface Request {
   sender: Condition<{ type: ObjectId; ref: string }>;
   recipient: Condition<{ type: ObjectId; ref: string }>;
+  dropinDate: Condition<{ type: Date; required: boolean }>;
+  dropoffDate: Condition<{ type: Date; required: boolean }>;
   status: string;
 }
+
+export interface RequestDocument extends Request, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface RequestModel extends Model<RequestDocument> {}
 
 export interface Review {
   sender: Condition<{ type: ObjectId; ref: string }>;
@@ -98,8 +108,16 @@ export interface Review {
 }
 
 export interface Conversation {
-  members: Condition<{ type: Array}>;
+  members: ObjectId[];
 }
+
+export interface ConversationDocument extends Conversation, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface ConversationModel extends Model<ConversationDocument>{}
 
 export interface Message {
   conversationId: Condition<{type: ObjectId; required: boolean}>;
@@ -108,3 +126,24 @@ export interface Message {
   text: Condition<{type: Types; required: boolean}>;
   read: Condition<{type: Types; default: boolean}>;
 }
+
+export interface MessageDocument extends Message, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface MessageModel extends Model<MessageDocument>{}
+
+export interface Socket {
+  socketId: Condition<{type: string; required: boolean}>;
+  userId: Condition<{type: string; required: boolean}>;
+}
+
+export interface SocketDocument extends Socket, Document {
+  _doc: {
+    [key?: string]: string | number | boolean;
+  };
+}
+
+export interface SocketModel extends Model<SocketDocument>{}
