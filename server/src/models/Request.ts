@@ -12,12 +12,24 @@ const RequestSchema: Schema<Request, Model<RequestModel>> = new Schema(
       ref: "DogSitter",
     },
     dropinDate: {
-      type: Date,
-      required: true
+      date: {
+        type: String,
+        required: true
+      },
+      time: {
+        type: String,
+        required: true
+      }
     },
     dropoffDate: {
-      type: Date,
-      required: true
+      date: {
+        type: String,
+        required: true
+      },
+      time: {
+        type: String,
+        required: true
+      }
     },
     status: {
         type: String,

@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
 import { Box, Card, Typography, Button, TextField } from "@mui/material";
-import { DatePicker, TimePicker } from "@mui/lab";
+import { DatePicker, TimePicker } from "formik-mui-lab";
 import DateAdapter from "@mui/lab/AdapterMoment";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import { Rating } from "react-simple-star-rating";
 import { Review } from "../../../../interface/Review";
 import sumRating from "../../../../utils/ratings";
 import { useNavigate } from "react-router-dom";
-import {
-  Conversation,
-} from "../../../../interface/conversations";
+import { Conversation } from "../../../../interface/conversations";
 import {
   fetchRecipientConv,
   createConversation,
 } from "../../../../helpers/APICalls/conversations";
-import { Formik, FormikState } from "formik";
+import { Formik, FormikState, Field, Form } from "formik";
+import moment from "moment"
+import { useAppSelector } from "../../../../store/hooks";
 import * as Yup from "yup";
 import * as classes from "./useStyles";
+import "./formik-field.module.css";
 
 interface Props {
   _id: string;
@@ -25,16 +26,21 @@ interface Props {
 }
 
 const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
-  const [value, setValue] = useState<Date | null>(null);
+  const loggedInUser = useAppSelector(state => state.users)
   const [conv, setConv] = useState<Conversation[] | Array<Conversation>>([]);
   const navigate = useNavigate();
   const finalRating = sumRating(reviews);
-  const initialValues = {
-    dropinDate: '',
-    dropinTime: '',
-    dropoffDate: '',
-    dropoffTime: ''
-  }
+  const initialValues: {
+    dropinDate: Date | string;
+    dropinTime: Date | string;
+    dropoffTime: Date | string;
+    dropoffDate: Date | string;
+  } = {
+    dropinDate: "",
+    dropinTime: "",
+    dropoffDate: "",
+    dropoffTime: "",
+  };
 
   const handleNavMessagePage = () => {
     let newConv: Conversation[] | Conversation;
@@ -52,7 +58,24 @@ const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
       navigate(`/messages/${(conv as Conversation[])[0]._id}`);
     }
   };
-  console.log(conv);
+
+  const handleSubmit = (values: {
+    dropinDate: Date | string;
+    dropinTime: Date | string;
+    dropoffDate: Date | string;
+    dropoffTime: Date | string;
+  }): void => {
+      // Check if logged in user if not send user feedback
+      const { dropinDate, dropinTime, dropoffDate, dropoffTime } = values
+      const convertedDropinDate = moment(dropinDate).format("DD/MM/YYYY")
+      const convertedDropinTime = moment(dropinTime).format("HH:mm a")
+      const convertedDropoffDate = moment(dropoffDate).format("DD/MM/YYYY")
+      const convertedDropoffTime = moment(dropoffTime).format("HH:mm a")
+
+      console.log(convertedDropinDate, convertedDropinTime)
+      console.log(convertedDropoffDate, convertedDropoffTime)
+  };
+
   useEffect(() => {
     fetchRecipientConv(_id)
       .then((data) => {
@@ -66,7 +89,6 @@ const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
 
     return () => {
       setConv([]);
-      setValue(null);
     };
   }, []);
 
@@ -78,82 +100,126 @@ const SideCard: React.FC<Props> = ({ _id, price, reviews }) => {
       <Box sx={classes.starsWrapper}>
         <Rating ratingValue={finalRating as number} readonly />
       </Box>
-      
-      <Box>
-        <Box component={Typography}>Drop-in</Box>
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <Box
-            value={value}
-            onChange={(newValue: any) => setValue(newValue)}
-            renderInput={(params: any) => (
-              <Box
-                component={TextField}
-                {...params}
-                label="Drop in"
-                defaultValue="mm/dd"
-              />
-            )}
-            component={DatePicker}
-          />
-          <Box
-            value={value}
-            onChange={(newValue: any) => setValue(newValue)}
-            renderInput={(params: any) => (
-              <Box
-                sx={classes.timePicker}
-                component={TextField}
-                {...params}
-                label="Drop off"
-                placeholder="mm/dd"
-              />
-            )}
-            component={TimePicker}
-          />
-        </LocalizationProvider>
-      </Box>
-      <Box sx={classes.dropOffWrapper}>
-        <Box component={Typography}>Drop-Off</Box>
-        <LocalizationProvider dateAdapter={DateAdapter}>
-          <Box
-            value={value}
-            onChange={(newValue: any) => setValue(newValue)}
-            renderInput={(params: any) => (
-              <Box
-                component={TextField}
-                {...params}
-                label="Drop in"
-                defaultValue="mm/dd"
-              />
-            )}
-            component={DatePicker}
-          />
-          <Box
-            value={value}
-            onChange={(newValue: any) => setValue(newValue)}
-            renderInput={(params: any) => (
-              <Box
-                sx={classes.timePicker}
-                component={TextField}
-                {...params}
-                label="Drop off"
-                placeholder="mm/dd"
-              />
-            )}
-            component={TimePicker}
-          />
-        </LocalizationProvider>
-      </Box>
-      <Button sx={classes.requestButton} variant="contained" disableElevation>
-        Send Request
-      </Button>
-      <Button
-        onClick={handleNavMessagePage}
-        sx={classes.messageButton}
-        variant="contained"
-        disableElevation
+      <Formik
+        initialValues={initialValues}
+        validationSchema={Yup.object().shape({
+          dropinDate: Yup.date()
+            .min(new Date(), "Please choose a future date")
+            .required("A drop in date is required"),
+          dropinTime: Yup.string().required("A drop in time is required"),
+          dropoffDate: Yup.date()
+            .when(
+              "dropinDate",
+              (dropinDate, schema) =>
+                dropinDate &&
+                schema.min(
+                  dropinDate,
+                  "Drop off date has to be more than dropin date"
+                )
+            )
+            .required("A drop off date is required"),
+          dropoffTime: Yup.string().required("A drop off time is required"),
+        })}
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          handleSubmit(values)
+          setSubmitting(false);
+        }}
       >
-        Message
-      </Button>
+        {({
+          handleSubmit,
+          handleChange,
+          values,
+          touched,
+          errors,
+          isSubmitting,
+          setFieldValue,
+        }) => (
+          <LocalizationProvider dateAdapter={DateAdapter}>
+            <Box component={Form} sx={classes.form}>
+              <Box sx={classes.dropinField}>
+                <Box component={Typography}>Drop-in</Box>
+                <Box sx={classes.dateField}>
+                  <Field
+                    name="dropinDate"
+                    component={DatePicker}
+                    style={{ width: "100%", marginBottom: "10px" }}
+                  />
+                </Box>
+
+                <Field name="dropinTime" component={TimePicker} />
+              </Box>
+              <Box sx={classes.dropoffField}>
+                <Box component={Typography}>Drop-Off</Box>
+                <Box sx={classes.dateField}>
+                  <Field name="dropoffDate" component={DatePicker} />
+                </Box>
+
+                <Field name="dropoffTime" component={TimePicker} />
+              </Box>
+              {/* <LocalizationProvider dateAdapter={DateAdapter}>
+                  <Box
+                    value={values.dropoffDate}
+                    onChange={(value: any) =>
+                      setFieldValue("dropoffDate", value)
+                    }
+                    renderInput={(params: any) => (
+                      <Box
+                        component={TextField}
+                        {...params}
+                        label="Drop off"
+                        helperText={
+                          touched.dropoffDate ? errors.dropoffDate : ""
+                        }
+                        error={
+                          touched.dropoffDate && Boolean(errors.dropoffDate)
+                        }
+                      />
+                    )}
+                    component={DatePicker}
+                  />
+                  <Box
+                    value={values.dropoffTime}
+                    onChange={(value: any) =>
+                      setFieldValue("dropoffTime", value)
+                    }
+                    renderInput={(params: any) => (
+                      <Box
+                        sx={classes.timePicker}
+                        component={TextField}
+                        {...params}
+                        label="Drop off"
+                        placeholder="mm/dd"
+                        helperText={
+                          touched.dropoffTime ? errors.dropoffTime : ""
+                        }
+                        error={
+                          touched.dropoffTime && Boolean(errors.dropoffTime)
+                        }
+                      />
+                    )}
+                    component={TimePicker}
+                  />
+                </LocalizationProvider> */}
+              <Button
+                type="submit"
+                sx={classes.requestButton}
+                variant="contained"
+                disableElevation
+              >
+                Send Request
+              </Button>
+              <Button
+                onClick={handleNavMessagePage}
+                sx={classes.messageButton}
+                variant="contained"
+                disableElevation
+              >
+                Message
+              </Button>
+            </Box>
+          </LocalizationProvider>
+        )}
+      </Formik>
     </Card>
   );
 };

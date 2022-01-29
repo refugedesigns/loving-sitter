@@ -81,8 +81,14 @@ export interface Image {
 export interface Request {
   sender: Condition<{ type: ObjectId; ref: string }>;
   recipient: Condition<{ type: ObjectId; ref: string }>;
-  dropinDate: Condition<{ type: Date; required: boolean }>;
-  dropoffDate: Condition<{ type: Date; required: boolean }>;
+  dropinDate: {
+    date: Condition<{ type: string; required: boolean }>;
+    time: Condition<{ type: string; required: boolean }>;
+  };
+  dropoffDate: {
+    date: Condition<{ type: string; required: boolean }>;
+    time: Condition<{ type: string; required: boolean }>;
+  };
   status: string;
 }
 

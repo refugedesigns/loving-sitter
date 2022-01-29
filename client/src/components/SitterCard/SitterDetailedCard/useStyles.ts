@@ -12,7 +12,7 @@ export const mainCardWrapper: SxProps<Theme> = {
 export const subCardWrapper: SxProps<Theme> = {
   position: "relative",
   display: "flex",
-  flexGrow: { lg: 1 },
+  flex: { lg: 8 },
   flexDirection: "column",
   width: { xs: "100%", sm: "80%", md: "70%", lg: "50%" },
   maxWidth: { lg: 900 },
@@ -21,7 +21,8 @@ export const subCardWrapper: SxProps<Theme> = {
 export const sideCardWrapper: SxProps<Theme> = {
   display: "flex",
   justifyContent: "center",
-  height: { md: 550 },
+  flex: { lg: 4},
+  width: "100%",
 };
 
 export const imageWrapper: SxProps<Theme> = {
